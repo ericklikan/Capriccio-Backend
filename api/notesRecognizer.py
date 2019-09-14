@@ -30,7 +30,7 @@ class GripPipeline:
         self.__filter_contours_min_width = 0
         self.__filter_contours_max_width = 1000
         self.__filter_contours_min_height = 0
-        self.__filter_contours_max_height = 1000
+        self.__filter_contours_max_height = 1000.0
         self.__filter_contours_solidity = [0, 100]
         self.__filter_contours_max_vertices = 1000000
         self.__filter_contours_min_vertices = 0
@@ -39,12 +39,16 @@ class GripPipeline:
 
         self.filter_contours_output = None
 
+        self.__convex_hulls_contours = self.filter_contours_output
+
+        self.convex_hulls_output = None
+
     def process(self, source0):
         """
         Runs the pipeline and sets all outputs to new values.
         """
         # Step HSV_Threshold0:
-        self.__hsv_threshold_input = source0
+        self.__hsv_threshold_input = cv2.imread(source0)
         (self.hsv_threshold_output) = self.__hsv_threshold(self.__hsv_threshold_input, self.__hsv_threshold_hue,
                                                            self.__hsv_threshold_saturation, self.__hsv_threshold_value)
 
@@ -67,6 +71,10 @@ class GripPipeline:
                                                                self.__filter_contours_min_vertices,
                                                                self.__filter_contours_min_ratio,
                                                                self.__filter_contours_max_ratio)
+
+        # Step Convex_Hulls0:
+        self.__convex_hulls_contours = self.filter_contours_output
+        (self.convex_hulls_output) = self.__convex_hulls(self.__convex_hulls_contours)
 
     @staticmethod
     def __hsv_threshold(input, hue, sat, val):
@@ -96,7 +104,7 @@ class GripPipeline:
         else:
             mode = cv2.RETR_LIST
         method = cv2.CHAIN_APPROX_SIMPLE
-        im2, contours, hierarchy = cv2.findContours(input, mode=mode, method=method)
+        contours, hierarchy = cv2.findContours(input, mode=mode, method=method)
         return contours
 
     @staticmethod
@@ -128,7 +136,7 @@ class GripPipeline:
             if (h < min_height or h > max_height):
                 continue
             area = cv2.contourArea(contour)
-            if (area < min_area):
+            if (area <= min_area):
                 continue
             if (cv2.arcLength(contour, True) < min_perimeter):
                 continue
@@ -141,8 +149,20 @@ class GripPipeline:
             ratio = (float)(w) / h
             if (ratio < min_ratio or ratio > max_ratio):
                 continue
-            print(contour)
             output.append(contour)
+        return output
+
+    @staticmethod
+    def __convex_hulls(input_contours):
+        """Computes the convex hulls of contours.
+        Args:
+            input_contours: A list of numpy.ndarray that each represent a contour.
+        Returns:
+            A list of numpy.ndarray that each represent a contour.
+        """
+        output = []
+        for contour in input_contours:
+            output.append(cv2.convexHull(contour))
         return output
 
 
