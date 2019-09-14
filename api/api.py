@@ -20,16 +20,20 @@ def test():
 
 @api.route("/image", methods=["POST"])
 def image():
-    if not os.path.isdir(app.config["UPLOAD_FOLDER"]):
-        os.mkdir(app.config["UPLOAD_FOLDER"])
+    # Create folder if not exist
+    if not os.path.isdir(os.path.join(app.root_path ,app.config["UPLOAD_FOLDER"])):
+        os.mkdir(os.path.join(app.root_path ,app.config["UPLOAD_FOLDER"]))
+
     encoded_string = base64.b64encode(str.encode(request.json['image']))
     decoded_string = base64.b64decode(encoded_string)   
     filename = secure_filename("{}.jpeg".format(uuid.uuid4()))
-    with open(os.path.join(app.config["UPLOAD_FOLDER"], filename), "wb") as image_file:
+
+    with open(os.path.join(app.root_path ,app.config["UPLOAD_FOLDER"], filename), "wb") as image_file:
         image_file.write(decoded_string)
+        
     return filename
 
-@api.route('/get_image/<filename>')
+@api.route('/get_image/<path:filename>')
 def uploaded_file(filename):
-    return send_from_directory(app.config['UPLOAD_FOLDER'],
-                               filename)
+    uploads = os.path.join(app.root_path, app.config['UPLOAD_FOLDER'])
+    return send_from_directory(uploads, filename, as_attachment=True)
