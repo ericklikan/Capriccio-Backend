@@ -1,4 +1,5 @@
 from PIL import Image
+from opencv import GripPipeline
 
 RGB_BLACK = (0, 0, 0)
 RGB_DIFFERENCE = 60
@@ -34,3 +35,6 @@ def find_staff_coordinates(image :str) -> list:
 
 
 print(find_staff_coordinates('../image/image.jpg'))
+print("output")
+gripPipeline = GripPipeline()
+gripPipeline.process('../image/image.jpg')
