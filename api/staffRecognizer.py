@@ -12,12 +12,23 @@ def is_rgb_value_similar(value1, value2):
     return False
 
 
-im = Image.open('../image/image.jpg') # Can be many different formats.
-pix = im.load()
-x,y = im.size
-print(im.size)  # Get the width and hight of the image for iterating over
-mid = x / 2
-for i in range(y):
-    #print(str(i) + " " + str(pix[mid,i]))
-    if is_rgb_value_similar(pix[mid,i], RGB_BLACK):
-        print("This pixel is black: " + str(i))
+def find_staff_coordinates(image :str) -> list:
+    im = Image.open(image)
+    pix = im.load()
+    x, y = im.size
+    mid = x / 2
+
+    line_count = 0
+    staff_coordinates = []
+
+    for i in range(y):
+        if is_rgb_value_similar(pix[mid, i], RGB_BLACK):
+            y_coord = i
+            if line_count == 0 or abs(y_coord - staff_coordinates[line_count - 1]) > 10:
+                staff_coordinates.append(y_coord)
+                line_count += 1
+
+    return staff_coordinates
+
+
+print(find_staff_coordinates('../image/image.jpg'))
