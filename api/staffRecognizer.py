@@ -35,9 +35,9 @@ def find_staff_coordinates(image :str) -> list:
 
     return staff_coordinates
 
-print(find_staff_coordinates('../image/perfect.jpg'))
+print(find_staff_coordinates('../image/arpeggio.jpg'))
 #print(find_staff_coordinates('../image/image.jpg'))
 print("output")
 gripPipeline = GripPipeline()
 #gripPipeline.process('../image/image.jpg')
-gripPipeline.process('../image/perfect.jpg')
+gripPipeline.process('../image/arpeggio.jpg')
