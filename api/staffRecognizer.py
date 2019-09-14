@@ -1,8 +1,8 @@
 from PIL import Image
-from opencv import GripPipeline
+from notesRecognizer import GripPipeline
 
 RGB_BLACK = (0, 0, 0)
-RGB_DIFFERENCE = 60
+RGB_DIFFERENCE = 100
 
 PIXEL_DIFFERENCE = 10
 
@@ -25,16 +25,20 @@ def find_staff_coordinates(image :str) -> list:
     staff_coordinates = []
 
     for i in range(y):
+
+        #print(pix[mid,i])
         if is_rgb_value_similar(pix[mid, i], RGB_BLACK):
             y_coord = i
+            print(y_coord)
             if line_count == 0 or abs(y_coord - staff_coordinates[line_count - 1]) > PIXEL_DIFFERENCE:
                 staff_coordinates.append(y_coord)
                 line_count += 1
 
     return staff_coordinates
 
-
-print(find_staff_coordinates('../image/image.jpg'))
+print(find_staff_coordinates('../image/69982062_361377188078148_4391311645901586432_n.jpg'))
+#print(find_staff_coordinates('../image/image.jpg'))
 print("output")
 gripPipeline = GripPipeline()
-gripPipeline.process('../image/image.jpg')
+#gripPipeline.process('../image/image.jpg')
+gripPipeline.process('../image/69982062_361377188078148_4391311645901586432_n.jpg')
