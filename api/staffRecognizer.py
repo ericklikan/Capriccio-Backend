@@ -3,6 +3,8 @@ from PIL import Image
 RGB_BLACK = (0, 0, 0)
 RGB_DIFFERENCE = 60
 
+PIXEL_DIFFERENCE = 10
+
 
 def is_rgb_value_similar(value1, value2):
     if (abs(value1[0] - value2[0]) <= RGB_DIFFERENCE and
@@ -24,7 +26,7 @@ def find_staff_coordinates(image :str) -> list:
     for i in range(y):
         if is_rgb_value_similar(pix[mid, i], RGB_BLACK):
             y_coord = i
-            if line_count == 0 or abs(y_coord - staff_coordinates[line_count - 1]) > 10:
+            if line_count == 0 or abs(y_coord - staff_coordinates[line_count - 1]) > PIXEL_DIFFERENCE:
                 staff_coordinates.append(y_coord)
                 line_count += 1
 
