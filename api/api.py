@@ -24,13 +24,12 @@ def image():
     if not os.path.isdir(os.path.join(app.root_path ,app.config["UPLOAD_FOLDER"])):
         os.mkdir(os.path.join(app.root_path ,app.config["UPLOAD_FOLDER"]))
 
-    encoded_string = base64.b64encode(str.encode(request.json['image']))
-    decoded_string = base64.b64decode(encoded_string)   
+    decoded_string = base64.b64decode(str.encode(request.json['image']))   
     filename = secure_filename("{}.jpeg".format(uuid.uuid4()))
 
-    with open(os.path.join(app.root_path ,app.config["UPLOAD_FOLDER"], filename), "wb") as image_file:
+    with open(os.path.join(app.root_path, app.config["UPLOAD_FOLDER"], filename), "wb") as image_file:
         image_file.write(decoded_string)
-        
+
     return filename
 
 @api.route('/get_image/<path:filename>')
