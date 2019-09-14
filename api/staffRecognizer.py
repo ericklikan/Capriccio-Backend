@@ -1,5 +1,4 @@
 from PIL import Image
-from notesRecognizer import GripPipeline
 
 RGB_BLACK = (0, 0, 0)
 RGB_DIFFERENCE = 100
@@ -34,10 +33,3 @@ def find_staff_coordinates(image :str) -> list:
                 line_count += 1
 
     return staff_coordinates
-
-print(find_staff_coordinates('../image/perfect.jpg'))
-#print(find_staff_coordinates('../image/image.jpg'))
-print("output")
-gripPipeline = GripPipeline()
-#gripPipeline.process('../image/image.jpg')
-gripPipeline.process('../image/perfect.jpg')

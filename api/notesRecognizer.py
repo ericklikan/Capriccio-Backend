@@ -3,6 +3,9 @@ import numpy
 import math
 from enum import Enum
 
+Y_COORD = "y_coord"
+X_COORD = "x_coord"
+
 
 class GripPipeline:
     """
@@ -188,8 +191,8 @@ class GripPipeline:
                 noteY = abs((extBot[1] + extTop[1])/2)
                 print("x: " + str(x+(w/2)) + " y: " + str(noteY))
                 notes.append({
-                    "x": x+(w/2),
-                    "y": noteY
+                    X_COORD: x+(w/2),
+                    Y_COORD: noteY
                 })
             else:
                 noteMiddleY = (extRight[1]+extLeft[1])/2;
@@ -197,14 +200,14 @@ class GripPipeline:
                 if(abs(noteMiddleY-extTop[1])>=abs(noteMiddleY-extBot[1])):
                     print("x: " + str(extLeft[0]) + " y: " + str(extLeft[1]))
                     notes.append({
-                        "x": extLeft[0],
-                        "y": extLeft[1]
+                        X_COORD: extLeft[0],
+                        Y_COORD: extLeft[1]
                     })
                 else:
                     print("x: " + str(extRight[0]) + " y: " + str(extRight[1]))
                     notes.append({
-                        "x": extRight[0],
-                        "y": extRight[1]
+                        X_COORD: extRight[0],
+                        Y_COORD: extRight[1]
                     })
             i+=1
 
