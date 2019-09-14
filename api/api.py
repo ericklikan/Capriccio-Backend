@@ -20,6 +20,8 @@ def test():
 
 @api.route("/image", methods=["POST"])
 def image():
+    if not os.path.isdir(app.config["UPLOAD_FOLDER"]):
+        os.mkdir(app.config["UPLOAD_FOLDER"])
     encoded_string = base64.b64encode(request.json['image'])
     decoded_string = base64.b64decode(encoded_string)   
     filename = secure_filename("{}.jpeg".format(uuid.uuid4()))
