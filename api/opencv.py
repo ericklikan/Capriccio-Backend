@@ -44,7 +44,7 @@ class GripPipeline:
         Runs the pipeline and sets all outputs to new values.
         """
         # Step HSV_Threshold0:
-        self.__hsv_threshold_input = source0
+        self.__hsv_threshold_input = cv2.imread(source0)
         (self.hsv_threshold_output) = self.__hsv_threshold(self.__hsv_threshold_input, self.__hsv_threshold_hue, self.__hsv_threshold_saturation, self.__hsv_threshold_value)
 
         # Step Find_Contours0:
@@ -84,7 +84,7 @@ class GripPipeline:
         else:
             mode = cv2.RETR_LIST
         method = cv2.CHAIN_APPROX_SIMPLE
-        im2, contours, hierarchy =cv2.findContours(input, mode=mode, method=method)
+        contours, hierarchy	= cv2.findContours(input, mode=mode, method=method)
         return contours
 
     @staticmethod
@@ -116,7 +116,7 @@ class GripPipeline:
             if (h < min_height or h > max_height):
                 continue
             area = cv2.contourArea(contour)
-            if (area < min_area):
+            if (area <= min_area):
                 continue
             if (cv2.arcLength(contour, True) < min_perimeter):
                 continue
