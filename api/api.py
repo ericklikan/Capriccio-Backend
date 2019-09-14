@@ -32,6 +32,11 @@ def image():
 
     return filename
 
+@api.route("/process_image", methods=["GET"])
+def process_images():
+    print(request.args.get("images"))
+    return ""
+
 @api.route('/get_image/<path:filename>')
 def uploaded_file(filename):
     uploads = os.path.join(app.root_path, app.config['UPLOAD_FOLDER'])
