@@ -13,8 +13,8 @@ class GripPipeline:
         """initializes all values to presets or None if need to be set
         """
 
-        self.__hsv_threshold_hue = [37.24748304018886, 100.57959159185884]
-        self.__hsv_threshold_saturation = [0.0, 255.0]
+        self.__hsv_threshold_hue = [37.24748304018886, 102.10760517420181]
+        self.__hsv_threshold_saturation = [66.50179856115108, 255.0]
         self.__hsv_threshold_value = [25.22482014388489, 255.0]
 
         self.hsv_threshold_output = None
@@ -25,7 +25,7 @@ class GripPipeline:
         self.find_contours_output = None
 
         self.__filter_contours_contours = self.find_contours_output
-        self.__filter_contours_min_area = 8.0
+        self.__filter_contours_min_area = 500.0
         self.__filter_contours_min_perimeter = 0
         self.__filter_contours_min_width = 0
         self.__filter_contours_max_width = 1000
@@ -42,6 +42,8 @@ class GripPipeline:
         self.__convex_hulls_contours = self.filter_contours_output
 
         self.convex_hulls_output = None
+
+        self.__noteHeightThreshold = 50;
 
     def process(self, source0):
         """
@@ -75,6 +77,9 @@ class GripPipeline:
         # Step Convex_Hulls0:
         self.__convex_hulls_contours = self.filter_contours_output
         (self.convex_hulls_output) = self.__convex_hulls(self.__convex_hulls_contours)
+
+        #Step NoteLocate
+        self.__findNoteLocation(self.__noteHeightThreshold,self.__convex_hulls_contours)
 
     @staticmethod
     def __hsv_threshold(input, hue, sat, val):
@@ -164,6 +169,44 @@ class GripPipeline:
         for contour in input_contours:
             output.append(cv2.convexHull(contour))
         return output
+
+    @staticmethod
+    def __findNoteLocation(noteHeightThreshold, input_contours):
+        notes = []
+        i = 0
+        for contour in input_contours:
+
+            print(i)
+            x, y, w, h = cv2.boundingRect(contour)
+            # determine the most extreme points along the contour
+            extLeft = tuple(contour[contour[:, :, 0].argmin()][0])
+            extRight = tuple(contour[contour[:, :, 0].argmax()][0])
+            extTop = tuple(contour[contour[:, :, 1].argmin()][0])
+            extBot = tuple(contour[contour[:, :, 1].argmax()][0])
+
+            if(abs(extBot[1]-extTop[1]) < noteHeightThreshold):
+                noteY = abs((extBot[1] + extTop[1])/2)
+                print("x: " + str(x+(w/2)) + " y: " + str(noteY))
+                notes.append({
+                    "x": x+(w/2),
+                    "y": noteY
+                })
+            else:
+                noteMiddleY = (extRight[1]+extLeft[1])/2;
+
+                if(abs(noteMiddleY-extTop[1])>=abs(noteMiddleY-extBot[1])):
+                    print("x: " + str(extLeft[0]) + " y: " + str(extLeft[1]))
+                    notes.append({
+                        "x": extLeft[0],
+                        "y": extLeft[1]
+                    })
+                else:
+                    print("x: " + str(extRight[0]) + " y: " + str(extRight[1]))
+                    notes.append({
+                        "x": extRight[0],
+                        "y": extRight[1]
+                    })
+            i+=1
 
 
 
