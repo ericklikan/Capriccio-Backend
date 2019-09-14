@@ -22,7 +22,7 @@ def test():
 def image():
     if not os.path.isdir(app.config["UPLOAD_FOLDER"]):
         os.mkdir(app.config["UPLOAD_FOLDER"])
-    encoded_string = base64.b64encode(request.json['image'])
+    encoded_string = base64.b64encode(str.encode(request.json['image']))
     decoded_string = base64.b64decode(encoded_string)   
     filename = secure_filename("{}.jpeg".format(uuid.uuid4()))
     with open(os.path.join(app.config["UPLOAD_FOLDER"], filename), "wb") as image_file:
