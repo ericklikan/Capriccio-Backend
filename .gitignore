@@ -16,5 +16,4 @@ build/
 .idea/
 .vscode/
 
-run.sh
 *.json
