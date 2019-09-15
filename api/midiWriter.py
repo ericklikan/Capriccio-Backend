@@ -30,7 +30,7 @@ class MidiWriter:
             if COUNT % 7 == 0:
                 time += 1
 
-        with open(os.path.join(app.root_path, app.config["UPLOAD_FOLDER"], id+".mid"), "wb") as output_file:
+        with open(os.path.join(app.root_path, app.config["UPLOAD_FOLDER"], "{}.mid".format(id)), "wb") as output_file:
             MyMIDI.writeFile(output_file)
 
 
