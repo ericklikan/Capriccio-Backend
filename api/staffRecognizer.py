@@ -1,8 +1,8 @@
 from PIL import Image
-from notesRecognizer import GripPipeline
-from notesService import convert_coords_to_pitches
-from midiWriter import MidiWriter
-from staffService import get_note_intervals_from_staff_coords
+from .notesRecognizer import GripPipeline
+from .notesService import convert_coords_to_pitches
+from .midiWriter import MidiWriter
+from .staffService import get_note_intervals_from_staff_coords
 
 RGB_BLACK = (0, 0, 0)
 RGB_DIFFERENCE = 100

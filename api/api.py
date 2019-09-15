@@ -4,7 +4,7 @@ from flask import current_app as app
 from werkzeug.utils import secure_filename
 import os, json, uuid, base64
 
-from staffRecognizer import generateMidiFileFromImage
+from .staffRecognizer import generateMidiFileFromImage
 
 api = Blueprint('api', __name__)
 

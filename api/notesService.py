@@ -1,6 +1,6 @@
-from midiWriter import PITCH, BEATS
-from notesRecognizer import X_COORD, Y_COORD
-from staffService import get_note_intervals_from_staff_coords
+from .midiWriter import PITCH, BEATS
+from .notesRecognizer import X_COORD, Y_COORD
+from .staffService import get_note_intervals_from_staff_coords
 
 NOTE_PITCHES_DICT = [40, 42, 44, 45, 47, 49, 51, 52, 54, 56, 57, 59, 61]
 
