@@ -22,7 +22,7 @@ def find_staff_coordinates(image :str) -> list:
     im = Image.open(image)
     pix = im.load()
     x, y = im.size
-    mid = x - 100
+    mid = x - 50
 
     line_count = 0
     staff_coordinates = []
