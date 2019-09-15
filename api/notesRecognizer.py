@@ -1,8 +1,8 @@
 import cv2
-import numpy
-import math
 from enum import Enum
 
+Y_COORD = "y_coord"
+X_COORD = "x_coord"
 
 class GripPipeline:
     """
@@ -13,9 +13,15 @@ class GripPipeline:
         """initializes all values to presets or None if need to be set
         """
 
-        self.__hsv_threshold_hue = [37.24748304018886, 102.10760517420181]
-        self.__hsv_threshold_saturation = [66.50179856115108, 255.0]
-        self.__hsv_threshold_value = [25.22482014388489, 255.0]
+        self.__blur_type = BlurType.Gaussian_Blur
+        self.__blur_radius = 9
+
+        self.blur_output = None
+
+        self.__hsv_threshold_input = self.blur_output
+        self.__hsv_threshold_hue = [38.83167892564055, 111.66043061972651]
+        self.__hsv_threshold_saturation = [0.0, 255.0]
+        self.__hsv_threshold_value = [0.0, 255.0]
 
         self.hsv_threshold_output = None
 
@@ -25,11 +31,11 @@ class GripPipeline:
         self.find_contours_output = None
 
         self.__filter_contours_contours = self.find_contours_output
-        self.__filter_contours_min_area = 500.0
+        self.__filter_contours_min_area = 15.0
         self.__filter_contours_min_perimeter = 0
-        self.__filter_contours_min_width = 0
+        self.__filter_contours_min_width = 15.0
         self.__filter_contours_max_width = 1000
-        self.__filter_contours_min_height = 0
+        self.__filter_contours_min_height = 15.0
         self.__filter_contours_max_height = 1000.0
         self.__filter_contours_solidity = [0, 100]
         self.__filter_contours_max_vertices = 1000000
@@ -49,8 +55,15 @@ class GripPipeline:
         """
         Runs the pipeline and sets all outputs to new values.
         """
+
+        self.source_image = cv2.imread(source0)
+
+        # Step Blur0:
+        self.__blur_input = cv2.imread(source0)
+        (self.blur_output) = self.__blur(self.__blur_input, self.__blur_type, self.__blur_radius)
+
         # Step HSV_Threshold0:
-        self.__hsv_threshold_input = cv2.imread(source0)
+        self.__hsv_threshold_input = self.blur_output
         (self.hsv_threshold_output) = self.__hsv_threshold(self.__hsv_threshold_input, self.__hsv_threshold_hue,
                                                            self.__hsv_threshold_saturation, self.__hsv_threshold_value)
 
@@ -78,8 +91,30 @@ class GripPipeline:
         self.__convex_hulls_contours = self.filter_contours_output
         (self.convex_hulls_output) = self.__convex_hulls(self.__convex_hulls_contours)
 
-        #Step NoteLocate
-        self.__findNoteLocation(self.__noteHeightThreshold,self.__convex_hulls_contours)
+        # Step NoteLocate
+        self.notes_coords = self.__findNoteLocation(self.__noteHeightThreshold, self.__convex_hulls_contours)
+
+    @staticmethod
+    def __blur(src, type, radius):
+        """Softens an image using one of several filters.
+        Args:
+            src: The source mat (numpy.ndarray).
+            type: The blurType to perform represented as an int.
+            radius: The radius for the blur as a float.
+        Returns:
+            A numpy.ndarray that has been blurred.
+        """
+        if (type is BlurType.Box_Blur):
+            ksize = int(2 * round(radius) + 1)
+            return cv2.blur(src, (ksize, ksize))
+        elif (type is BlurType.Gaussian_Blur):
+            ksize = int(6 * round(radius) + 1)
+            return cv2.GaussianBlur(src, (ksize, ksize), round(radius))
+        elif (type is BlurType.Median_Filter):
+            ksize = int(2 * round(radius) + 1)
+            return cv2.medianBlur(src, ksize)
+        else:
+            return cv2.bilateralFilter(src, -1, round(radius), round(radius))
 
     @staticmethod
     def __hsv_threshold(input, hue, sat, val):
@@ -141,7 +176,7 @@ class GripPipeline:
             if (h < min_height or h > max_height):
                 continue
             area = cv2.contourArea(contour)
-            if (area <= min_area):
+            if (area < min_area):
                 continue
             if (cv2.arcLength(contour, True) < min_perimeter):
                 continue
@@ -170,13 +205,13 @@ class GripPipeline:
             output.append(cv2.convexHull(contour))
         return output
 
-    @staticmethod
-    def __findNoteLocation(noteHeightThreshold, input_contours):
+
+    def __findNoteLocation(self, noteHeightThreshold, input_contours) -> list:
         notes = []
         i = 0
         for contour in input_contours:
 
-            print(i)
+            # print(i)
             x, y, w, h = cv2.boundingRect(contour)
             # determine the most extreme points along the contour
             extLeft = tuple(contour[contour[:, :, 0].argmin()][0])
@@ -184,29 +219,35 @@ class GripPipeline:
             extTop = tuple(contour[contour[:, :, 1].argmin()][0])
             extBot = tuple(contour[contour[:, :, 1].argmax()][0])
 
-            if(abs(extBot[1]-extTop[1]) < noteHeightThreshold):
-                noteY = abs((extBot[1] + extTop[1])/2)
-                print("x: " + str(x+(w/2)) + " y: " + str(noteY))
+
+            cv2.circle(self.source_image, extLeft, 25, .5)
+            cv2.circle(self.source_image, extRight, 25, .5)
+            cv2.circle(self.source_image, extTop, 25, .5)
+            cv2.circle(self.source_image, extBot, 25, .5)
+
+            # 0 = x coord, 1 = y coord
+
+            noteMiddleY = (extRight[1]+extLeft[1])/2;
+
+            if abs(noteMiddleY-extTop[1]) >= abs(noteMiddleY-extBot[1]):
+                # print("bot x: " + str(extBot[0]) + " y: " + str(extBot[1]))
                 notes.append({
-                    "x": x+(w/2),
-                    "y": noteY
+                    X_COORD: extLeft[0],
+                    Y_COORD: extLeft[1]
                 })
             else:
-                noteMiddleY = (extRight[1]+extLeft[1])/2;
-
-                if(abs(noteMiddleY-extTop[1])>=abs(noteMiddleY-extBot[1])):
-                    print("x: " + str(extLeft[0]) + " y: " + str(extLeft[1]))
-                    notes.append({
-                        "x": extLeft[0],
-                        "y": extLeft[1]
-                    })
-                else:
-                    print("x: " + str(extRight[0]) + " y: " + str(extRight[1]))
-                    notes.append({
-                        "x": extRight[0],
-                        "y": extRight[1]
-                    })
+                # print("top x: " + str(extTop[0]) + " y: " + str(extTop[1]))
+                notes.append({
+                    X_COORD: extRight[0],
+                    Y_COORD: extRight[1]
+                })
             i+=1
 
+        # cv2.imshow('input', self.source_image)
+        # cv2.waitKey()
+        # cv2.destroyAllWindows()
+
+        return notes
 
 
+BlurType = Enum('BlurType', 'Box_Blur Gaussian_Blur Median_Filter Bilateral_Filter')
