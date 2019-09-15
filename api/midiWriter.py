@@ -9,16 +9,6 @@ class MidiWriter:
     def __init__(self):
         return
 
-    def __convert_note_names_to_midi(self, raw_notes: list):
-        notes = []
-        for raw_note in raw_notes:
-            notes.append({
-                BEATS: 1,
-                PITCH: raw_note[PITCH] + 20
-            })
-
-        return notes
-
     def add_track(self, notes: list):
         track = 0
         channel = 0
@@ -36,3 +26,15 @@ class MidiWriter:
 
         with open(MIDI_FILE_URI, "wb") as output_file:
             MyMIDI.writeFile(output_file)
+
+
+    @staticmethod
+    def convert_note_pitches_to_midi(raw_notes: list):
+        notes = []
+        for raw_note in raw_notes:
+            notes.append({
+                BEATS: 1,
+                PITCH: raw_note[PITCH] + 20
+            })
+
+        return notes
