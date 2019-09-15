@@ -28,6 +28,7 @@ def image():
 
     decoded_string = base64.b64decode(str.encode(request.json['image']))   
     id = uuid.uuid4()
+    print("image id: {}".format(id))
     filename = secure_filename("{}.jpeg".format(id))
     filePath = os.path.join(app.root_path, app.config["UPLOAD_FOLDER"], filename)
     with open(filePath, "wb") as image_file:
