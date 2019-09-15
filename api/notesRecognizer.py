@@ -227,7 +227,7 @@ class GripPipeline:
 
             # 0 = x coord, 1 = y coord
 
-            noteMiddleY = (extRight[1]+extLeft[1])/2;
+            noteMiddleY = (extRight[1]+extLeft[1])/2
 
             if abs(noteMiddleY-extTop[1]) >= abs(noteMiddleY-extBot[1]):
                 # print("bot x: " + str(extBot[0]) + " y: " + str(extBot[1]))
