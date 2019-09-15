@@ -1,15 +1,16 @@
+import os
 from midiutil import MIDIFile
+from flask import current_app as app
 
 BEATS = "beats"
 PITCH = "pitch"
-MIDI_FILE_URI = "../midi/test.mid"
 
 
 class MidiWriter:
     def __init__(self):
         return
 
-    def add_track(self, notes: list):
+    def add_track(self, notes: list, id: str):
         track = 0
         channel = 0
         time = 0
@@ -22,14 +23,14 @@ class MidiWriter:
         MyMIDI = MIDIFile(1)
         MyMIDI.addTempo(track, time, tempo)
 
-        for i, note in enumerate(notes):
+        for note in notes:
             COUNT = (COUNT + 1) % 7
             MyMIDI.addNote(track, channel, note[PITCH], time, duration, volume)
             time += note[BEATS]
             if COUNT % 7 == 0:
                 time += 1
 
-        with open(MIDI_FILE_URI, "wb") as output_file:
+        with open(os.path.join(app.root_path, app.config["UPLOAD_FOLDER"], id+".mid"), "wb") as output_file:
             MyMIDI.writeFile(output_file)
 
 

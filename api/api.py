@@ -4,7 +4,7 @@ from flask import current_app as app
 from werkzeug.utils import secure_filename
 import os, json, uuid, base64
 
-from midiWriter import MIDI_FILE_URI
+from staffRecognizer import generateMidiFileFromImage
 
 api = Blueprint('api', __name__)
 
@@ -27,12 +27,16 @@ def image():
         os.mkdir(os.path.join(app.root_path ,app.config["UPLOAD_FOLDER"]))
 
     decoded_string = base64.b64decode(str.encode(request.json['image']))   
-    filename = secure_filename("{}.jpeg".format(uuid.uuid4()))
-
-    with open(os.path.join(app.root_path, app.config["UPLOAD_FOLDER"], filename), "wb") as image_file:
+    id = uuid.uuid4()
+    filename = secure_filename("{}.jpeg".format(id))
+    filePath = os.path.join(app.root_path, app.config["UPLOAD_FOLDER"], filename)
+    with open(filePath, "wb") as image_file:
         image_file.write(decoded_string)
 
-    return json.dumps({"fileName":"test.mid"})
+    # Run opencv
+    generateMidiFileFromImage(id, filePath)
+
+    return json.dumps({"fileName":"{}.mid".format(id)})
 
 @api.route("/process_images", methods=["GET"])
 def process_images():
