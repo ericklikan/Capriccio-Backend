@@ -22,7 +22,7 @@ def find_staff_coordinates(image :str) -> list:
     im = Image.open(image)
     pix = im.load()
     x, y = im.size
-    mid = x - 100
+    mid = x/2
 
     line_count = 0
     staff_coordinates = []
@@ -38,13 +38,13 @@ def find_staff_coordinates(image :str) -> list:
 
     return staff_coordinates
 
-staff_coords = find_staff_coordinates('../image/Davids/goodTwinkleExtended.jpg')
+staff_coords = find_staff_coordinates('../image/Jasons/plsplspls.jpg')
 print(staff_coords)
 #print(find_staff_coordinates('../image/image.jpg'))
 print("output")
 gripPipeline = GripPipeline()
 #gripPipeline.process('../image/image.jpg')
-gripPipeline.process('../image/Davids/goodTwinkleExtended.jpg')
+gripPipeline.process('../image/Jasons/plsplspls.jpg')
 print("notes coordinates")
 gripPipeline.notes_coords.sort(key=lambda x: x['x_coord'])
 print(gripPipeline.notes_coords)
