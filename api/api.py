@@ -4,6 +4,8 @@ from flask import current_app as app
 from werkzeug.utils import secure_filename
 import os, json, uuid, base64
 
+from midiWriter import MIDI_FILE_URI
+
 api = Blueprint('api', __name__)
 
 def allowed_file(filename):
