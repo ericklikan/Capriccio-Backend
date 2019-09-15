@@ -15,7 +15,7 @@ class MidiWriter:
         channel = 0
         time = 0
         duration = 1
-        tempo = 100
+        tempo = 160
         volume = 100
 
         COUNT = 0
