@@ -233,13 +233,13 @@ class GripPipeline:
                 # print("bot x: " + str(extBot[0]) + " y: " + str(extBot[1]))
                 notes.append({
                     X_COORD: extLeft[0],
-                    Y_COORD: (extRight[1] + extLeft[1]) / 2
+                    Y_COORD: extLeft[1]
                 })
             else:
                 # print("top x: " + str(extTop[0]) + " y: " + str(extTop[1]))
                 notes.append({
                     X_COORD: extRight[0],
-                    Y_COORD: (extRight[1] + extLeft[1]) / 2
+                    Y_COORD: extRight[1]
                 })
             i+=1
 
