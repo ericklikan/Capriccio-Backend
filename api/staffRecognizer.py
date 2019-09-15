@@ -29,7 +29,7 @@ def find_staff_coordinates(image :str) -> list:
 
     for i in range(y):
 
-        # print(str(i) + " " + str(pix[mid,i]))
+        print(str(i) + " " + str(pix[mid,i]))
         if is_rgb_value_similar(pix[mid, i], RGB_BLACK):
             y_coord = i
             if line_count == 0 or abs(y_coord - staff_coordinates[line_count - 1]) > PIXEL_DIFFERENCE:
@@ -38,13 +38,13 @@ def find_staff_coordinates(image :str) -> list:
 
     return staff_coordinates
 
-staff_coords = find_staff_coordinates('../image/Davids/digitalStaff.jpg')
+staff_coords = find_staff_coordinates('../image/Davids/goodTwinkleExtended.jpg')
 print(staff_coords)
 #print(find_staff_coordinates('../image/image.jpg'))
 print("output")
 gripPipeline = GripPipeline()
 #gripPipeline.process('../image/image.jpg')
-gripPipeline.process('../image/Davids/digitalStaff.jpg')
+gripPipeline.process('../image/Davids/goodTwinkleExtended.jpg')
 print("notes coordinates")
 gripPipeline.notes_coords.sort(key=lambda x: x['x_coord'])
 print(gripPipeline.notes_coords)
