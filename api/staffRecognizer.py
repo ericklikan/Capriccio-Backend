@@ -1,8 +1,8 @@
 from PIL import Image
-from notesRecognizer import GripPipeline
-from notesService import convert_coords_to_pitches
-from midiWriter import MidiWriter
-from staffService import get_note_intervals_from_staff_coords
+from .notesRecognizer import GripPipeline
+from .notesService import convert_coords_to_pitches
+from .midiWriter import MidiWriter
+from .staffService import get_note_intervals_from_staff_coords
 
 RGB_BLACK = (0, 0, 0)
 RGB_DIFFERENCE = 100
@@ -22,7 +22,7 @@ def find_staff_coordinates(image :str) -> list:
     im = Image.open(image)
     pix = im.load()
     x, y = im.size
-    mid = x - 100
+    mid = x - 50
 
     line_count = 0
     staff_coordinates = []
@@ -38,19 +38,19 @@ def find_staff_coordinates(image :str) -> list:
 
     return staff_coordinates
 
-staff_coords = find_staff_coordinates('../image/Davids/goodTwinkleExtended.jpg')
-print(staff_coords)
-#print(find_staff_coordinates('../image/image.jpg'))
-print("output")
-gripPipeline = GripPipeline()
-#gripPipeline.process('../image/image.jpg')
-gripPipeline.process('../image/Davids/goodTwinkleExtended.jpg')
-print("notes coordinates")
-gripPipeline.notes_coords.sort(key=lambda x: x['x_coord'])
-print(gripPipeline.notes_coords)
-print("notes pitches")
-note_pitches = convert_coords_to_pitches(staff_coords, gripPipeline.notes_coords)
-print(note_pitches)
-midiWriter = MidiWriter()
-midi_notes = midiWriter.convert_note_pitches_to_midi(note_pitches)
-midiWriter.add_track(midi_notes)
+def generateMidiFileFromImage(id: str, filepath: str):
+    staff_coords = find_staff_coordinates(filepath)
+    print(staff_coords)
+    print("output")
+    gripPipeline = GripPipeline()
+    gripPipeline.process(filepath)
+    print("notes coordinates")
+    gripPipeline.notes_coords.sort(key=lambda x: x['x_coord'])
+    print(gripPipeline.notes_coords)
+    print("notes pitches")
+    note_pitches = convert_coords_to_pitches(staff_coords, gripPipeline.notes_coords)
+    print(note_pitches)
+    midiWriter = MidiWriter()
+    midi_notes = midiWriter.convert_note_pitches_to_midi(note_pitches)
+    midiWriter.add_track(midi_notes, id)
+

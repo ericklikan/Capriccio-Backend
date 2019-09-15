@@ -49,7 +49,7 @@ class GripPipeline:
 
         self.convex_hulls_output = None
 
-        self.__noteHeightThreshold = 50;
+        self.__noteHeightThreshold = 50
 
     def process(self, source0):
         """
