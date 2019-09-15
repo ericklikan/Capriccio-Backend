@@ -243,9 +243,9 @@ class GripPipeline:
                 })
             i+=1
 
-        cv2.imshow('input', self.source_image)
-        cv2.waitKey()
-        cv2.destroyAllWindows()
+        # cv2.imshow('input', self.source_image)
+        # cv2.waitKey()
+        # cv2.destroyAllWindows()
 
         return notes
 

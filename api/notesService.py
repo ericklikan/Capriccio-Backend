@@ -21,7 +21,7 @@ def convert_coords_to_pitches(staff_coords: list, raw_notes: list) -> list:
             if raw_note[Y_COORD] >= notes_intervals[i]:
                 notes.append({
                     PITCH: NOTE_PITCHES_DICT[i],
-                    BEATS: 4
+                    BEATS: 1
                 })
                 break
 
