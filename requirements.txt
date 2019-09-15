@@ -9,6 +9,7 @@ Jinja2==2.10.1
 lazy-object-proxy==1.4.2
 MarkupSafe==1.1.1
 mccabe==0.6.1
+MIDIUtil==1.2.1
 numpy==1.17.2
 opencv-python==4.1.1.26
 Pillow==6.1.0
