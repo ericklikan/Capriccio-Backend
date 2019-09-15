@@ -29,7 +29,7 @@ def find_staff_coordinates(image :str) -> list:
 
     for i in range(y):
 
-        # print(str(i) + " " + str(pix[mid,i]))
+        print(str(i) + " " + str(pix[mid,i]))
         if is_rgb_value_similar(pix[mid, i], RGB_BLACK):
             y_coord = i
             if line_count == 0 or abs(y_coord - staff_coordinates[line_count - 1]) > PIXEL_DIFFERENCE:
@@ -37,7 +37,6 @@ def find_staff_coordinates(image :str) -> list:
                 line_count += 1
 
     return staff_coordinates
-
 
 def generateMidiFileFromImage(id: str, filepath: str):
     staff_coords = find_staff_coordinates(filepath)
@@ -54,3 +53,4 @@ def generateMidiFileFromImage(id: str, filepath: str):
     midiWriter = MidiWriter()
     midi_notes = midiWriter.convert_note_pitches_to_midi(note_pitches)
     midiWriter.add_track(midi_notes, id)
+
