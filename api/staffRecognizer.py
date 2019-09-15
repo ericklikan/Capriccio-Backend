@@ -38,6 +38,7 @@ def find_staff_coordinates(image :str) -> list:
 
     return staff_coordinates
 
+
 staff_coords = find_staff_coordinates('../image/Davids/digitalStaff.jpg')
 print(staff_coords)
 #print(find_staff_coordinates('../image/image.jpg'))

@@ -32,9 +32,9 @@ def image():
     with open(os.path.join(app.root_path, app.config["UPLOAD_FOLDER"], filename), "wb") as image_file:
         image_file.write(decoded_string)
 
-    return json.dumps({"fileName":filename})
+    return json.dumps({"fileName":"test.mid"})
 
-@api.route("/process_image", methods=["GET"])
+@api.route("/process_images", methods=["GET"])
 def process_images():
     print(request.args.get("images"))
     return ""
