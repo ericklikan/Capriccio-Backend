@@ -20,9 +20,9 @@ def create_app():
 
     @app.route('/get_image/<path:filename>')
     def uploaded_file(filename):
-        print(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        # print(os.path.join(app.config['UPLOAD_FOLDER'], filename))
         uploads = os.path.join(app.root_path, app.config['UPLOAD_FOLDER'])
-        print(uploads)
+        # print(uploads)
         return send_from_directory(uploads, filename, as_attachment=True)
 
     return app

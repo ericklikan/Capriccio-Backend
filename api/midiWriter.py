@@ -33,7 +33,6 @@ class MidiWriter:
         with open(os.path.join(app.root_path, app.config["UPLOAD_FOLDER"], "{}.mid".format(id)), "wb") as output_file:
             MyMIDI.writeFile(output_file)
 
-
     @staticmethod
     def convert_note_pitches_to_midi(raw_notes: list):
         notes = []

@@ -12,9 +12,8 @@ def convert_coords_to_pitches(staff_coords: list, raw_notes: list) -> list:
 
     notes_intervals.reverse()
 
-    print("notes_intervals")
-    print(notes_intervals)
-
+    # print("notes_intervals")
+    # print(notes_intervals)
 
     for raw_note in raw_notes:
         for i in range(0, len(notes_intervals)):

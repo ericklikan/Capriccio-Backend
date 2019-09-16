@@ -2,7 +2,7 @@ def get_note_intervals_from_staff_coords(staff_coords: list) -> list:
     note_intervals = []
     staff_coords.reverse()
 
-    print(staff_coords)
+    # print(staff_coords)
 
     bottom_dist = (staff_coords[0] - staff_coords[1]) / 4
     note_intervals.append(staff_coords[0] + bottom_dist * 3)
