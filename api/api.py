@@ -59,7 +59,7 @@ def uploaded_file(filename):
     return send_from_directory(uploads, filename, as_attachment=True)
 
 
-@api.route('/delete_image/<path:filename>')
+@api.route('/delete_image/<path:filename>', methods=['DELETE'])
 def delete_file(filename):
     uploads = os.path.join(app.root_path, app.config['UPLOAD_FOLDER'])
     os.remove(os.path.join(uploads, filename))
