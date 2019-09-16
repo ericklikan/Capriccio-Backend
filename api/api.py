@@ -57,3 +57,10 @@ def process_images():
 def uploaded_file(filename):
     uploads = os.path.join(app.root_path, app.config['UPLOAD_FOLDER'])
     return send_from_directory(uploads, filename, as_attachment=True)
+
+
+@api.route('/delete_image/<path:filename>')
+def delete_file(filename):
+    uploads = os.path.join(app.root_path, app.config['UPLOAD_FOLDER'])
+    os.remove(os.path.join(uploads, filename))
+    return "OK"
