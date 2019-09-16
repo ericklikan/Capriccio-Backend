@@ -44,7 +44,7 @@ def image():
     # Run opencv
     generateMidiFileFromImage(id, filePath)
 
-    return json.dumps({"fileName": "{}.mid".format(id)})
+    return json.dumps({"fileName": "{}".format(id)})
 
 
 @api.route("/process_images", methods=["GET"])
