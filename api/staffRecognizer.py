@@ -28,8 +28,6 @@ def find_staff_coordinates(image :str) -> list:
     staff_coordinates = []
 
     for i in range(y):
-
-        print(str(i) + " " + str(pix[mid,i]))
         if is_rgb_value_similar(pix[mid, i], RGB_BLACK):
             y_coord = i
             if line_count == 0 or abs(y_coord - staff_coordinates[line_count - 1]) > PIXEL_DIFFERENCE:
