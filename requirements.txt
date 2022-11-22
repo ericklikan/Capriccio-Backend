@@ -12,7 +12,7 @@ mccabe==0.6.1
 MIDIUtil==1.2.1
 numpy==1.17.2
 opencv-python==4.1.1.26
-Pillow==6.1.0
+Pillow==9.3.0
 pylint==2.3.1
 six==1.12.0
 typed-ast==1.4.0
